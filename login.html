@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Sign Up - Sthira</title>
+  <style>
+    :root {
+      --primary-color: #9beffa;
+      --secondary-color: #005662;
+      --accent-color: #26c6da;
+      --text-color: #ffffff;
+      --button-hover-color: #004d4d;
+      --tab-active-color: #1da2b3;
+      --tab-inactive-color: #7bd7e2;
+      --back-hover-color: #b2f0ff;
+    }
+
+    body, button, input, textarea {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: var(--primary-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: var(--secondary-color);
+      padding: 40px;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 120px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: var(--accent-color);
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    .form-container {
+      margin-top: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin: 10px 0 5px;
+    }
+
+    input, textarea {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--accent-color);
+      background-color: var(--primary-color);
+      color: var(--text-color);
+      margin-bottom: 15px;
+    }
+
+    button {
+      background-color: var(--accent-color);
+      color: var(--primary-color);
+      border: none;
+      padding: 12px;
+      border-radius: 25px;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: var(--button-hover-color);
+      transform: translateY(-2px);
+    }
+
+    .tab {
+      display: flex;
+      margin-bottom: 20px;
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .tab button {
+      flex: 1;
+      background-color: var(--tab-inactive-color);
+      border: none;
+      color: var(--secondary-color);
+      padding: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .tab button.active {
+      background-color: var(--tab-active-color);
+      color: var(--text-color);
+    }
+
+    .otp-section {
+      margin-top: 20px;
+    }
+
+    .otp-slider {
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .back-btn {
+      margin-top: 20px;
+      background-color: transparent;
+      color: var(--text-color);
+      font-size: 14px;
+      border: 2px solid var(--accent-color);
+      border-radius: 20px;
+      padding: 8px 16px;
+      transition: color 0.3s, border-color 0.3s, background-color 0.3s;
+    }
+
+    .back-btn:hover {
+      color: var(--back-hover-color);
+      border-color: var(--back-hover-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="sthira_logo.jpg" alt="Sthira Logo" class="logo" />
+    <h1>Welcome to Sthira</h1>
+    <p>Your supportive AI companion for mental well-being</p>
+
+    <div class="form-container">
+      <div class="tab">
+        <button id="loginTab" class="active" onclick="switchForm('login')">Login</button>
+        <button id="signupTab" onclick="switchForm('signup')">Sign Up</button>
+      </div>
+
+      <form id="loginForm">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" required />
+
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" required />
+
+        <button type="submit">Login</button>
+      </form>
+
+      <form id="signupForm" class="hidden">
+        <label for="signupName">Full Name</label>
+        <input type="text" id="signupName" required />
+
+        <label for="signupEmail">Email</label>
+        <input type="email" id="signupEmail" required />
+
+        <label for="signupPassword">Password</label>
+        <input type="password" id="signupPassword" required />
+
+        <label for="phoneNumber">Phone Number</label>
+        <input type="tel" id="phoneNumber" placeholder="+91 9876543210" required />
+
+        <button type="button" onclick="sendOTP()">Send OTP</button>
+
+        <div id="otpSection" class="hidden otp-section">
+          <label for="otpInput">Enter OTP</label>
+          <input type="text" id="otpInput" placeholder="Enter OTP" />
+          <input type="range" id="otpSlider" min="0" max="100" value="0" class="otp-slider" />
+          <button type="button" onclick="verifyOTP()">Verify OTP</button>
+        </div>
+
+        <label for="mentalHealthInfo">Mental Health Details (Optional)</label>
+        <textarea id="mentalHealthInfo" placeholder="Share if you'd like Sthira to better support you."></textarea>
+
+        <button type="submit">Sign Up</button>
+      </form>
+    </div>
+
+    <button class="back-btn" onclick="goBack('index.html')">← Back to Home</button>
+  </div>
+
+  <script>
+    let generatedOTP = '';
+
+    function switchForm(formType) {
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('signupForm').classList.add('hidden');
+      document.getElementById('loginTab').classList.remove('active');
+      document.getElementById('signupTab').classList.remove('active');
+
+      if (formType === 'login') {
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('loginTab').classList.add('active');
+      } else {
+        document.getElementById('signupForm').classList.remove('hidden');
+        document.getElementById('signupTab').classList.add('active');
+      }
+    }
+
+    function sendOTP() {
+      const phoneNumber = document.getElementById('phoneNumber').value;
+      if (!phoneNumber || !/^[+]?\d{10,15}$/.test(phoneNumber)) {
+        alert('Please enter a valid phone number.');
+        return;
+      }
+      generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+      alert(`Your OTP is: ${generatedOTP}`);
+      document.getElementById('otpSection').classList.remove('hidden');
+    }
+
+    function verifyOTP() {
+      const otpInput = document.getElementById('otpInput');
+      const enteredOTP = otpInput.value;
+      if (enteredOTP === generatedOTP) {
+        alert('OTP Verified Successfully!');
+        document.getElementById('otpSection').classList.add('hidden');
+        document.getElementById('loginForm').classList.remove('hidden');
+      } else {
+        alert('Invalid OTP. Please try again.');
+      }
+    }
+
+    function validateForm(formId) {
+      const form = document.getElementById(formId);
+      const inputs = form.getElementsByTagName('input');
+      for (let input of inputs) {
+        if (!input.value.trim()) {
+          alert('Please fill out all fields.');
+          return false;
+        }
+      }
+      alert('Form submitted successfully!');
+      return true;
+    }
+
+    function goBack() {
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

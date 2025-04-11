@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Sthira</title>
+  <link rel="icon" type="image/png" href="sthira_logo.jpg">
+  <style>
+    :root {
+      --primary-color: #9beffa;
+      --secondary-color: #005662;
+      --accent-color: #26c6da;
+      --text-color: #ffffff;
+      --button-hover-color: #004d4d;
+    }
+
+    body {
+      background-color: var(--primary-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 60px;
+    }
+
+    .container {
+      background-color: var(--secondary-color);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 450px;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    .logo {
+      width: 100px;
+      margin-bottom: 18px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      animation: slideUp 0.8s ease;
+    }
+
+    label {
+      margin-bottom: 6px;
+      font-size: 1rem;
+      color: var(--accent-color);
+      text-align: left;
+    }
+
+    input,
+    textarea {
+      padding: 12px;
+      margin-bottom: 14px;
+      border: 2px solid var(--accent-color);
+      border-radius: 10px;
+      font-size: 1rem;
+      color: var(--secondary-color);
+      background-color: var(--text-color);
+      transition: box-shadow 0.3s ease;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #666;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      box-shadow: 0 0 8px var(--accent-color);
+    }
+
+    button {
+      background-color: var(--accent-color);
+      color: var(--secondary-color);
+      border: none;
+      padding: 12px;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: var(--button-hover-color);
+      color: var(--text-color);
+      transform: scale(1.05);
+    }
+
+    nav button {
+      margin-top: 18px;
+      background-color: var(--secondary-color);
+      border: 2px solid var(--accent-color);
+      color: var(--text-color);
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    nav button:hover {
+      background-color: var(--button-hover-color);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <img src="sthira_logo.jpg" alt="Sthira Logo" class="logo">
+    <h2>Contact Sthira</h2>
+    <form id="contactForm">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="name" placeholder="Type your name here" required>
+
+      <label for="email">Your Email</label>
+      <input type="email" id="email" name="email" placeholder="Type your email here" required>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="5" placeholder="Type your message here..." required></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+    <nav>
+      <button onclick="navigateTo('index.html')">Back to Home</button>
+    </nav>
+  </div>
+
+  <script>
+    function navigateTo(pageUrl) {
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        window.location.href = pageUrl;
+      }, 300);
+    }
+
+    document.getElementById('contactForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      if (!name || !email || !message) {
+        alert('Please fill out all fields.');
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+
+      alert('Your message has been sent successfully!');
+      document.getElementById('contactForm').reset();
+    });
+  </script>
+</body>
+
+</html>

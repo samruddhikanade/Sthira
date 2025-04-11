@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sthira - Your Supportive Companion</title>
+  <style>
+    :root {
+      --primary-color: #9beffa;
+      --secondary-color: #005662;
+      --accent-color: #26c6da;
+      --text-color: #ffffff;
+      --button-hover-color: #004d4d;
+    }
+
+    body, h1, h2, p, a {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--primary-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+    }
+
+    #videoIntro {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      z-index: 999;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #mainContent {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: 1001;
+      position: relative;
+      text-align: center;
+    }
+
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 20px;
+      background-color: var(--secondary-color);
+      width: 100vw;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-sizing: border-box;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      width: 70px;
+      height: auto;
+      margin-bottom: 0;
+    }
+
+    .navbar {
+      display: flex;
+      gap: 50px; 
+      align-items: center;
+      justify-content: flex-end;
+      flex-grow: 1;
+      padding-right: 50px;
+    }
+
+    .navbar a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .navbar a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      left: 0;
+      bottom: -4px;
+      background-color: var(--accent-color);
+      transition: width 0.3s ease;
+    }
+
+    .navbar a:hover::after {
+      width: 100%;
+    }
+
+    .intro-section {
+      margin-top: 120px;
+      text-align: center;
+      color: var(--secondary-color);
+    }
+
+    .intro-section h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .intro-section p {
+      font-size: 1.2rem;
+      font-style: italic;
+    }
+
+    .chat-now-button {
+      margin-top: 20px;
+      padding: 20px 50px;
+      font-size: 1.4rem;
+      background-color: var(--accent-color);
+      color: var(--text-color);
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .chat-now-button:hover {
+      background-color: var(--button-hover-color);
+      transform: scale(1.05);
+    }
+
+    #features {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .feature {
+      flex: 1;
+      min-width: 250px;
+      max-width: 300px;
+      background-color: var(--secondary-color);
+      padding: 30px 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature h2 {
+      color: var(--accent-color);
+      margin-bottom: 15px;
+    }
+
+    .feature p {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .about-section {
+      margin-top: 80px;
+      padding: 60px 20px;
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+      text-align: center;
+      border-radius: 30px;
+    }
+
+    .about-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .about-section p {
+      font-size: 1.1rem;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    .why-sthira {
+      background-color: #ffffff10;
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--secondary-color);
+    }
+
+    .why-sthira h2 {
+      font-size: 2rem;
+      margin-bottom: 40px;
+    }
+
+    .why-cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .why-card {
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+      padding: 25px;
+      border-radius: 15px;
+      max-width: 300px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .why-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .why-card h3 {
+      color: var(--accent-color);
+      margin-bottom: 10px;
+    }
+
+    .quote-section {
+      padding: 40px 20px;
+      font-style: italic;
+      text-align: center;
+      color: var(--secondary-color);
+      font-size: 1.2rem;
+    }
+
+    .mission-section {
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--secondary-color);
+      background-color: #ffffff20;
+    }
+
+    .mission-section h2 {
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      color: var(--accent-color);
+    }
+
+    .mission-section p {
+      font-size: 1.1rem;
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .support-section {
+      background: none;
+      padding: 60px 20px 40px;
+      color: var(--text-color);
+      text-align: center;
+    }
+
+    #support h2 {
+      font-size: 2rem;
+      margin-bottom: 40px;
+      color: var(--secondary-color);
+    }
+
+    .support-grid {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .support-box {
+      flex: 1;
+      min-width: 220px;
+      max-width: 280px;
+      background-color: var(--secondary-color);
+      padding: 25px 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .support-box h3 {
+      color: var(--accent-color);
+      margin-bottom: 10px;
+    }
+
+    .support-box p {
+      font-size: 1rem;
+    }
+
+    .support-box a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    .support-box a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <section id="videoIntro">
+    <video autoplay muted playsinline id="introVideo">
+      <source src="sthira.mp4" type="video/mp4" />
+    </video>
+  </section>
+
+  <div id="mainContent" class="main-content">
+    <header class="header-bar">
+      <div class="logo-container">
+        <img src="sthira_logo.jpg" alt="Sthira Logo" class="logo" />
+      </div>
+      <nav class="navbar">
+        <a href="#" onclick="navigateHome(event)">Home</a>
+        <a href="#about">About</a>
+        <a href="login.html">Login / Sign Up</a>
+        <a href="chat.html">Chat with Sthira</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </header>
+
+    <section class="intro-section" id="home">
+      <h1>Welcome to Sthira</h1>
+      <p>Your safe space to share, reflect, and heal – anytime you need.</p>
+      <a href="chat.html"><button class="chat-now-button">Chat Now</button></a>
+    </section>
+
+    <section class="about-section" id="about">
+      <h2>About Us</h2>
+      <p>
+        Sthira is your trusted AI companion, designed to support mental wellness with compassion and care. 
+        Whether you're feeling overwhelmed, anxious, or just need someone to talk to, Sthira is here to listen, guide, 
+        and offer comfort – anytime, anywhere. Our goal is to make emotional support accessible and warm for everyone.
+      </p>
+    </section>
+
+    <section id="features">
+      <div class="feature">
+        <h2>AI-Powered Support</h2>
+        <p>Advanced AI technology providing personalized mental health guidance.</p>
+      </div>
+      <div class="feature">
+        <h2>Emotional Well-being</h2>
+        <p>Comprehensive support for anxiety, stress, and emotional challenges.</p>
+      </div>
+      <div class="feature">
+        <h2>Safe Space</h2>
+        <p>Confidential, judgment-free environment for your mental health journey.</p>
+      </div>
+    </section>
+
+    <section class="why-sthira">
+      <h2>Why Talk to Sthira?</h2>
+      <div class="why-cards">
+        <div class="why-card">
+          <h3>Always Listening</h3>
+          <p>Share anything, anytime – Sthira is here to listen, without judgment.</p>
+        </div>
+        <div class="why-card">
+          <h3>Backed by Care</h3>
+          <p>Built with empathy and AI, Sthira offers thoughtful responses that care.</p>
+        </div>
+        <div class="why-card">
+          <h3>You’re Not Alone</h3>
+          <p>Whether it's a rough day or an emotional wave, you're never alone with Sthira.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="quote-section">
+      <blockquote>“Every emotion is valid, and every voice deserves to be heard. With Sthira, you are never alone.” – Team Sthira</blockquote>
+    </section>
+
+    <section class="mission-section">
+      <h2>Our Mission & Values</h2>
+      <p>
+        Sthira was born from a vision to make mental wellness accessible, empathetic, and non-judgmental.
+        We believe in the power of being heard and understood. Our AI isn’t here to diagnose or replace professionals,
+        but to stand by you as a kind, friendly support system when you need it most. Your story matters. Your feelings matter.
+      </p>
+    </section>
+
+    <footer id="support" class="support-section">
+      <h2>Get Support</h2>
+      <div class="support-grid">
+        <div class="support-box">
+          <h3>Email Support</h3>
+          <p><a href="mailto:support@sthira.ai">support@sthira.ai</a></p>
+        </div>
+        <div class="support-box">
+          <h3>24/7 Helpline</h3>
+          <p><a href="tel:+18001234567">+1 (800) 123-4567</a></p>
+        </div>
+        <div class="support-box">
+          <h3>Available</h3>
+          <p>24/7, Always Here For You</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const video = document.getElementById('introVideo');
+    const videoIntro = document.getElementById('videoIntro');
+    const mainContent = document.getElementById('mainContent');
+
+    function showMainContent() {
+      if (videoIntro.style.display !== 'none') {
+        videoIntro.style.display = 'none';
+        mainContent.style.display = 'flex';
+        mainContent.style.opacity = '1';
+      }
+    }
+
+    video.addEventListener('ended', showMainContent);
+    video.addEventListener('error', showMainContent);
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(showMainContent, 3000);
+    });
+
+    function navigateHome(event) {
+      event.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
